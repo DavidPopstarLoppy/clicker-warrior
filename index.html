@@ -7,12 +7,16 @@
 		<p><img src="images/gold coin.jpg" height="25px" width="25px"> <span id="gold">0</span> </p>
 		
 		<button id="AutoBtn" onclick="buyAutoClicker()">Auto Clicker [<span id="AutoClickerCost">250</span>] -- <span id="AutoClickerCount">0</span></button>
+		<button id="ChngImg" onclick="changeSwordImage()">upgrade sword [<span id="SwordCost">500</span>] -- <span id="Swordcount"</span>0</button>
 		
-		<img src="images/sword.jpg" height="300px" width="250px" onclick="addToGold(1)">
+		
+		<p> <img id="woodsword" src="images/wooden sword.webp" height="300px" width="250px" onclick="addToGold(1)"> </p>
 		<script>
 			var gold = 0;
 			var AutoClickerCost = 250;
 			var AutoClickerCount = 0;
+			var SwordCost = 500;
+			var SwordMultiplier = 1;
 			
 			
 			function buyAutoClicker() {
@@ -27,12 +31,24 @@
 			}
 			
 			function addToGold(amount) {
-				gold = gold + amount;
+				gold = gold + amount * SwordMultiplier;
 				document.getElementById("gold").innerHTML = gold;
+			}			
+			
+			function changeSwordImage() {
+				if (gold >= SwordCost ) {
+					gold = gold - SwordCost;
+					
+					document.getElementById("gold").innerHTML = gold;
+					document.getElementById("ChngImg").disabled = 'true';
+					document.getElementById("woodsword").src = "images/sword.jpg";
+					SwordMultiplier = SwordMultiplier + 1;
+				}
+				
 			}
 			
 			setInterval(function() {
-				gold = gold + AutoClickerCount;
+				gold = gold + AutoClickerCount * SwordMultiplier;
 				document.getElementById("gold").innerHTML = gold;
 			}, 100); // 1000ms = 1 second
 		</script>
