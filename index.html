@@ -2,55 +2,86 @@
 	<head>
 		<title>Clicker Warrior</title>
 	</head>
-	<body>
+	<body onload="LoadLocalStorage()">
 		<p>Welcome to Clicker Warrior, click the sword to get gold</p>
 		<p><img src="images/gold coin.jpg" height="25px" width="25px"> <span id="gold">0</span> </p>
 		
 		<button id="AutoBtn" onclick="buyAutoClicker()">Auto Clicker [<span id="AutoClickerCost">250</span>] -- <span id="AutoClickerCount">0</span></button>
-		<button id="ChngImg" onclick="changeSwordImage()">upgrade sword [<span id="SwordCost">500</span>] -- <span id="Swordcount"</span>0</button>
-		
+		<button id="ChngImg" onclick="changeSwordImage()">upgrade sword [<span id="SwordCost">500</span>] -- <span id="Swordcount">0</span></button>
+		<button id="Reset" onclick="ResetLocalStorage()">Delete Save (permanent)</button>
+		<button id="Save" onclick="SaveLocalStorage()">Save</button>
+		<button id="Load" onclick="LoadLocalStorage()">Load</button>
 		
 		<p> <img id="woodsword" src="images/wooden sword.webp" height="300px" width="250px" onclick="addToGold(1)"> </p>
 		<script>
-			var gold = 0;
+			//var gold = 0;
 			var AutoClickerCost = 250;
-			var AutoClickerCount = 0;
+			//var AutoClickerCount = 0;
 			var SwordCost = 500;
-			var SwordMultiplier = 1;
+			//var SwordMultiplier = 1;
+			var gameValues = {
+				gold:0,
+				AutoClickerCount:0,
+				SwordMultiplier:1,
+				otherValue:"Testing"
+			}
 			
-			
+			function ResetLocalStorage() {
+				localStorage.clear();
+			}
+
+			function SaveLocalStorage() {
+				//Serialize then save
+				localStorage.setItem("gameValues", JSON.stringify(gameValues));
+			}
+
+			function LoadLocalStorage() {
+				//Retrieve Deserialize then load
+				var value = localStorage.getItem("gameValues");
+				if (value !== null) {
+					gameValues = JSON.parse(value);
+					document.getElementById("gold").innerHTML = gameValues.gold;
+					document.getElementById("AutoClickerCount").innerHTML = gameValues.AutoClickerCount;
+					document.getElementById("AutoBtn").disabled = (gameValues.AutoClickerCount != 0);
+					if (gameValues.SwordMultiplier != 1){
+						document.getElementById("ChngImg").disabled = 'true';
+						document.getElementById("woodsword").src = "images/sword.jpg";
+					}
+				}
+			}
+
 			function buyAutoClicker() {
-				if (gold >= AutoClickerCost) {
-					gold = gold - AutoClickerCost;
-					AutoClickerCount = AutoClickerCount + 1;
+				if (gameValues.gold >= AutoClickerCost) {
+					gameValues.gold = gameValues.gold - AutoClickerCost;
+					gameValues.AutoClickerCount = gameValues.AutoClickerCount + 1;
 					
-					document.getElementById("gold").innerHTML = gold;
-					document.getElementById("AutoClickerCount").innerHTML = AutoClickerCount;
+					document.getElementById("gold").innerHTML = gameValues.gold;
+					document.getElementById("AutoClickerCount").innerHTML = gameValues.AutoClickerCount;
 					document.getElementById("AutoBtn").disabled = 'true';
 				}
 			}
 			
 			function addToGold(amount) {
-				gold = gold + amount * SwordMultiplier;
-				document.getElementById("gold").innerHTML = gold;
+				gameValues.gold = gameValues.gold + amount * gameValues.SwordMultiplier;
+				document.getElementById("gold").innerHTML = gameValues.gold;
 			}			
 			
 			function changeSwordImage() {
-				if (gold >= SwordCost ) {
-					gold = gold - SwordCost;
+				if (gameValues.gold >= SwordCost ) {
+					gameValues.gold = gameValues.gold - SwordCost;
 					
-					document.getElementById("gold").innerHTML = gold;
+					document.getElementById("gold").innerHTML = gameValues.gold;
 					document.getElementById("ChngImg").disabled = 'true';
 					document.getElementById("woodsword").src = "images/sword.jpg";
-					SwordMultiplier = SwordMultiplier + 1;
+					gameValues.SwordMultiplier = gameValues.SwordMultiplier + 1;
 				}
 				
 			}
 			
 			setInterval(function() {
-				gold = gold + AutoClickerCount * SwordMultiplier;
-				document.getElementById("gold").innerHTML = gold;
-			}, 100); // 1000ms = 1 second
+				gameValues.gold = gameValues.gold + gameValues.AutoClickerCount * gameValues.SwordMultiplier;
+				document.getElementById("gold").innerHTML = gameValues.gold;
+			}, 1000); // 1000ms = 1 second
 		</script>
 	</body>
 </HTML>
