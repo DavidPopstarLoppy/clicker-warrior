@@ -44,8 +44,11 @@
 					document.getElementById("AutoClickerCount").innerHTML = gameValues.AutoClickerCount;
 					document.getElementById("AutoBtn").disabled = (gameValues.AutoClickerCount != 0);
 					if (gameValues.SwordMultiplier != 1){
-						document.getElementById("ChngImg").disabled = 'true';
+						document.getElementById("ChngImg").disabled = true;
 						document.getElementById("woodsword").src = "images/sword.jpg";
+					} else {
+						document.getElementById("ChngImg").disabled = false;
+						document.getElementById("woodsword").src = "images/wooden sword.webp";
 					}
 				}
 			}
@@ -57,7 +60,7 @@
 					
 					document.getElementById("gold").innerHTML = gameValues.gold;
 					document.getElementById("AutoClickerCount").innerHTML = gameValues.AutoClickerCount;
-					document.getElementById("AutoBtn").disabled = 'true';
+					document.getElementById("AutoBtn").disabled = true;
 				}
 			}
 			
@@ -71,7 +74,7 @@
 					gameValues.gold = gameValues.gold - SwordCost;
 					
 					document.getElementById("gold").innerHTML = gameValues.gold;
-					document.getElementById("ChngImg").disabled = 'true';
+					document.getElementById("ChngImg").disabled = true;
 					document.getElementById("woodsword").src = "images/sword.jpg";
 					gameValues.SwordMultiplier = gameValues.SwordMultiplier + 1;
 				}
